@@ -38,20 +38,22 @@
             position: relative;
         }
 
+        /* Perbaikan Basmalah */
         .bismillah {
             text-align: center;
-            font-size: 24px;
-            font-family: 'Times New Roman', serif;
-            margin-bottom: 10px;
-            color: #334155;
+            font-size: 28px; /* Sedikit lebih besar agar jelas */
+            font-family: "Amiri", "Times New Roman", serif;
+            margin-bottom: 5px;
+            color: #1e293b;
+            direction: rtl; /* Memastikan teks Arab dibaca dari kanan ke kiri */
         }
 
         .judul-utama {
             text-align: center;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 800;
             color: var(--primary-color);
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             margin-bottom: 20px;
             text-transform: uppercase;
         }
@@ -126,7 +128,6 @@
         label { display: inline-flex; align-items: center; margin-right: 15px; cursor: pointer; padding: 5px 10px; border-radius: 6px; white-space: nowrap; }
         input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary-color); margin-right: 8px; }
 
-        /* Styling Flexbox untuk Atas-Bawah */
         .flex-stack { display: flex; gap: 30px; }
         .stack-group { display: flex; flex-direction: column; gap: 8px; }
 
@@ -140,7 +141,7 @@
 
         @media print { 
             .btn-hapus, .btn-group, .no-print { display: none !important; } 
-            .header-controls { border-bottom: none; }
+            .header-controls { border-bottom: none; margin-bottom: 10px; }
             .container { box-shadow: none; border: none; padding: 0; }
             .watermark { display: block !important; }
             .bismillah, .judul-utama { color: black; display: block !important; }
@@ -153,7 +154,9 @@
 
     <div class="container" id="main-app">
         <div class="watermark" id="pdf-watermark">Kelompok 6 TTS Batch 5</div>
-        <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+        
+        <div class="bismillah">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
+        
         <div class="judul-utama">JURNAL ANALISIS SAHAM BPJP</div>
 
         <div class="header-controls" id="header-area">
