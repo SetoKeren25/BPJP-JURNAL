@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jurnal Analisis Saham BPJP</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            padding: 10px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header-controls {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        h2 { margin: 0 0 15px 0; color: #333; font-size: 1.5rem; }
+        button {
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            display: block;
+        }
+        .btn-tambah { background-color: #007bff; color: white; border: none; font-size: 1rem; }
+        .btn-tambah:hover { background-color: #0056b3; }
+        .btn-hapus { background-color: #fff; color: #dc3545; border: 1px solid #dc3545; margin-top: 15px; font-size: 0.9rem; }
+        .btn-hapus:hover { background-color: #dc3545; color: white; }
+
+        .tabel-container { border: 1px solid #000; margin-bottom: 30px; overflow: hidden; }
+        .nama-saham-header { background-color: #fff; padding: 10px 15px; border-bottom: 1px solid #000; }
+        .nama-saham-input {
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: none;
+            width: 100%;
+            outline: none;
+            color: #333;
+        }
+
+        .table-responsive { overflow-x: auto; width: 100%; }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        table, th, td { border: 1px solid #000; }
+        th, td { padding: 8px; text-align: left; vertical-align: middle; font-size: 13px; }
+
+        .col-no { width: 30px; text-align: center; font-weight: bold; }
+        .col-param { width: 220px; }
+        
+        .input-group { display: flex; align-items: center; gap: 8px; width: 100%; }
+        .input-broker { flex: 2; padding: 5px; border: 1px solid #ccc; border-radius: 3px; outline: none; }
+        .input-avg { flex: 1; padding: 5px; border: 1px solid #ccc; border-radius: 3px; outline: none; }
+
+        label { display: inline-flex; align-items: center; margin-right: 12px; cursor: pointer; padding: 2px 0; }
+        input[type="checkbox"] { margin-right: 6px; width: 13px; height: 13px; }
+
+        @media (min-width: 768px) {
+            body { padding: 40px; }
+            .btn-tambah { width: auto; margin: 0 auto; }
+            th, td { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-controls">
+            <h2>Jurnal Analisis Saham BPJP</h2>
+            <button class="btn-tambah" onclick="tambahTabel()">+ Tambah Tabel Saham Baru</button>
+        </div>
+        <div id="workspace"></div>
+    </div>
+
+    <template id="template-tabel">
+        <div class="tabel-container">
+            <div class="nama-saham-header">
+                <input type="text" class="nama-saham-input" placeholder="KETIK NAMA SAHAM DISINI">
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="col-no">1</td>
+                            <td class="col-param">Saham Bergerak</td>
+                            <td>
+                                <label><input type="checkbox"> Saham Bergerak</label>
+                                <label><input type="checkbox"> Saham Tidak Bergerak</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-no">2</td>
+                            <td class="col-param">Aliran Dana Broker Action</td>
+                            <td>
+                                <label><input type="checkbox"> Dari Kiri Ke Kanan</label>
+                                <label><input type="checkbox"> Dari Kanan ke Kiri</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-no">-</td>
+                            <td class="col-param">Top Buy (Broker & AVG)</td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="text" class="input-broker" placeholder="Nama Broker">
+                                    <span style="font-weight: bold; font-size: 12px;">AVG:</span>
+                                    <input type="number" class="input-avg" placeholder="Angka">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-no">-</td>
+                            <td class="col-param">Proses Akumulasi/Distribusi</td>
+                            <td>
+                                <label><input type="checkbox"> Proses Big Acc</label>
+                                <label><input type="checkbox"> Proses Big Dist</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-no">3</td>
+                            <td class="col-param">Price & Volume</td>
+                            <td>
+                                <label><input type="checkbox"> Harga Naik</label>
+                                <label><input type="checkbox"> Harga Turun</label>
+                                <label><input type="checkbox"> Volume Naik</label>
+                                <label><input type="checkbox"> Volume Turun</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-no">4</td>
+                            <td class="col-param">Indikator Stochastic</td>
+                            <td>
+                                <label><input type="checkbox"> Golden Cross</label>
+                                <label><input type="checkbox"> Death Cross</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-no">-</td>
+                            <td class="col-param">MACD</td>
+                            <td>
+                                <label><input type="checkbox"> Golden Cross</label>
+                                <label><input type="checkbox"> Death Cross</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-no">-</td>
+                            <td class="col-param">MA 20</td>
+                            <td>
+                                <label><input type="checkbox"> Diatas MA 20</label>
+                                <label><input type="checkbox"> Dibawah MA 20</label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button class="btn-hapus" onclick="hapusTabel(this)">Hapus Analisis</button>
+        </div>
+    </template>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            tambahTabel();
+        });
+
+        function tambahTabel() {
+            const workspace = document.getElementById('workspace');
+            const template = document.getElementById('template-tabel');
+            const clone = template.content.cloneNode(true);
+            workspace.appendChild(clone);
+        }
+
+        function hapusTabel(element) {
+            if(confirm("Hapus tabel analisis ini?")) {
+                element.parentElement.remove();
+            }
+        }
+    </script>
+</body>
+</html>
