@@ -14,6 +14,8 @@
             --card-bg: #ffffff;
             --border-color: #e2e8f0;
             --text-main: #1e293b;
+            --up-color: #10b981; 
+            --down-color: #ef4444; 
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,7 +37,24 @@
             position: relative;
         }
 
-        /* Watermark - Hanya muncul saat cetak/PDF */
+        .bismillah {
+            text-align: center;
+            font-size: 24px;
+            font-family: 'Times New Roman', serif;
+            margin-bottom: 10px;
+            color: #334155;
+        }
+
+        .judul-utama {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
         .watermark {
             display: none;
             position: absolute;
@@ -53,8 +72,6 @@
             border-bottom: 2px solid var(--border-color); 
         }
 
-        h2 { font-size: 1.8rem; font-weight: 800; color: var(--primary-color); letter-spacing: -0.5px; margin-bottom: 20px; }
-
         .btn-group { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
         
         button { 
@@ -71,11 +88,7 @@
         }
 
         .btn-tambah { background-color: var(--primary-color); color: white; }
-        .btn-tambah:hover { background-color: #1d4ed8; transform: translateY(-1px); }
-        
         .btn-pdf { background-color: var(--success-color); color: white; }
-        .btn-pdf:hover { background-color: #047857; }
-        
         .btn-reset { background-color: #64748b; color: white; }
         
         .btn-hapus { 
@@ -86,9 +99,7 @@
             width: 100%; 
             justify-content: center;
         }
-        .btn-hapus:hover { background-color: #fee2e2; }
 
-        /* Modern Table Style */
         .tabel-container { 
             border: 1px solid var(--border-color); 
             border-radius: 10px;
@@ -98,22 +109,8 @@
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
 
-        .nama-saham-header { 
-            background-color: #f1f5f9; 
-            padding: 15px; 
-            border-bottom: 1px solid var(--border-color); 
-        }
-
-        .nama-saham-input { 
-            font-size: 18px; 
-            font-weight: 700; 
-            text-transform: uppercase; 
-            border: none; 
-            width: 100%; 
-            outline: none; 
-            background: transparent;
-            color: var(--primary-color);
-        }
+        .nama-saham-header { background-color: #f1f5f9; padding: 15px; border-bottom: 1px solid var(--border-color); }
+        .nama-saham-input { font-size: 18px; font-weight: 700; text-transform: uppercase; border: none; width: 100%; outline: none; background: transparent; color: var(--primary-color); }
 
         .table-responsive { overflow-x: auto; width: 100%; }
         table { width: 100%; border-collapse: collapse; min-width: 650px; }
@@ -123,43 +120,49 @@
         .col-param { width: 230px; font-weight: 600; color: #334155; }
         
         .input-group { display: flex; align-items: center; gap: 10px; }
-        .input-broker, .input-avg { 
-            padding: 8px; 
-            border: 1px solid var(--border-color); 
-            border-radius: 6px; 
-            font-size: 14px;
-            outline: none;
-        }
-        .input-broker:focus, .input-avg:focus { border-color: var(--primary-color); ring: 2px solid #bfdbfe; }
+        .input-broker, .input-avg { padding: 8px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; outline: none; }
         
-        label { 
-            display: inline-flex; 
-            align-items: center; 
-            margin-right: 15px; 
-            cursor: pointer; 
-            padding: 5px 10px;
-            border-radius: 6px;
-            transition: background 0.2s;
-        }
-        label:hover { background: #f1f5f9; }
+        label { display: inline-flex; align-items: center; margin-right: 15px; cursor: pointer; padding: 5px 10px; border-radius: 6px; white-space: nowrap; }
         input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary-color); margin-right: 8px; }
 
-        /* PDF Printing Setup */
+        /* Styling Flexbox untuk Atas-Bawah */
+        .flex-stack {
+            display: flex;
+            gap: 30px;
+        }
+        .stack-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .status-up { color: var(--up-color); font-weight: bold; display: inline-flex; align-items: center; gap: 4px; }
+        .status-down { color: var(--down-color); font-weight: bold; display: inline-flex; align-items: center; gap: 4px; }
+        
+        .icon-arrow-up::before { content: '⬆'; }
+        .icon-arrow-down::before { content: '⬇'; }
+
+        .no-print { display: none !important; }
+
         @media print { 
-            .btn-hapus, .header-controls, .btn-group { display: none !important; } 
+            .btn-hapus, .btn-group, .no-print { display: none !important; } 
+            .header-controls { border-bottom: none; }
             .container { box-shadow: none; border: none; padding: 0; }
             .watermark { display: block !important; }
-            body { background: white; padding: 0; }
+            .bismillah, .judul-utama { color: black; display: block !important; }
+            .status-up { -webkit-print-color-adjust: exact; color: #059669 !important; }
+            .status-down { -webkit-print-color-adjust: exact; color: #dc2626 !important; }
         }
     </style>
 </head>
 <body>
 
     <div class="container" id="main-app">
-        <div class="watermark">Kelompok 6 TTS Batch 5</div>
+        <div class="watermark" id="pdf-watermark">Kelompok 6 TTS Batch 5</div>
+        <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+        <div class="judul-utama">JURNAL ANALISIS SAHAM BPJP</div>
 
-        <div class="header-controls">
-            <h2>Jurnal Analisis Saham BPJP</h2>
+        <div class="header-controls" id="header-area">
             <div class="btn-group">
                 <button class="btn-tambah" onclick="tambahTabel()">➕ Tambah Saham</button>
                 <button class="btn-pdf" onclick="simpanPDF()">📥 Simpan Ke PDF</button>
@@ -167,9 +170,7 @@
             </div>
         </div>
 
-        <div id="pdf-content">
-            <div id="workspace"></div>
-        </div>
+        <div id="workspace"></div>
     </div>
 
     <template id="template-tabel">
@@ -192,13 +193,22 @@
                             </div></td></tr>
                         <tr><td class="col-no">#</td><td class="col-param">Akumulasi / Distribusi</td>
                             <td><label><input type="checkbox" onchange="saveData()"> Big Acc</label><label><input type="checkbox" onchange="saveData()"> Big Dist</label></td></tr>
-                        <tr><td class="col-no">3</td><td class="col-param">Price & Volume</td>
+                        <tr>
+                            <td class="col-no">3</td>
+                            <td class="col-param">Price & Volume</td>
                             <td>
-                                <label><input type="checkbox" onchange="saveData()"> Harga ↑</label>
-                                <label><input type="checkbox" onchange="saveData()"> Harga ↓</label>
-                                <label><input type="checkbox" onchange="saveData()"> Vol ↑</label>
-                                <label><input type="checkbox" onchange="saveData()"> Vol ↓</label>
-                            </td></tr>
+                                <div class="flex-stack">
+                                    <div class="stack-group">
+                                        <label><input type="checkbox" onchange="saveData()"> <span class="status-up"><i class="icon-arrow-up"></i> Harga Naik</span></label>
+                                        <label><input type="checkbox" onchange="saveData()"> <span class="status-down"><i class="icon-arrow-down"></i> Harga Turun</span></label>
+                                    </div>
+                                    <div class="stack-group">
+                                        <label><input type="checkbox" onchange="saveData()"> <span class="status-up"><i class="icon-arrow-up"></i> Vol Naik</span></label>
+                                        <label><input type="checkbox" onchange="saveData()"> <span class="status-down"><i class="icon-arrow-down"></i> Vol Turun</span></label>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
                         <tr><td class="col-no">4</td><td class="col-param">Stochastic</td>
                             <td><label><input type="checkbox" onchange="saveData()"> Golden Cross</label><label><input type="checkbox" onchange="saveData()"> Death Cross</label></td></tr>
                         <tr><td class="col-no">5</td><td class="col-param">MACD</td>
@@ -208,7 +218,7 @@
                     </tbody>
                 </table>
             </div>
-            <button class="btn-hapus" onclick="hapusTabel(this)">🗑️ Hapus Baris Ini</button>
+            <button class="btn-hapus action-btn" onclick="hapusTabel(this)">🗑️ Hapus Baris Ini</button>
         </div>
     </template>
 
@@ -230,7 +240,6 @@
                     data.checks.forEach((val, i) => { if (checks[i]) checks[i].checked = val; });
                 }
             }
-
             workspace.appendChild(clone);
             saveData();
         }
@@ -270,20 +279,27 @@
 
         function simpanPDF() {
             const element = document.getElementById('main-app');
+            const btnGroup = document.querySelector('.btn-group');
+            const watermark = document.getElementById('pdf-watermark');
+            const hapusButtons = document.querySelectorAll('.action-btn');
+
+            btnGroup.classList.add('no-print');
+            watermark.style.display = 'block';
+            hapusButtons.forEach(btn => btn.classList.add('no-print'));
+
             const opt = {
-                margin: [0.3, 0.3, 0.3, 0.3],
-                filename: 'Analisis-Saham-BPJP.pdf',
+                margin: [0.5, 0.3, 0.5, 0.3],
+                filename: 'JURNAL-ANALISIS-SAHAM-BPJP.pdf',
                 image: { type: 'jpeg', quality: 1 },
                 html2canvas: { scale: 3, useCORS: true },
                 jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
             };
             
-            // Menampilkan watermark sebelum proses PDF
-            document.querySelector('.watermark').style.display = 'block';
-            
-            html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
-                // Sembunyikan kembali setelah selesai (opsional, karena halaman akan tetap ada)
-            }).save();
+            html2pdf().set(opt).from(element).save().then(() => {
+                btnGroup.classList.remove('no-print');
+                watermark.style.display = 'none';
+                hapusButtons.forEach(btn => btn.classList.remove('no-print'));
+            });
         }
     </script>
 </body>
