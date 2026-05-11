@@ -8,7 +8,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
-            --primary-color: #059669;
+            /* Palette Warna Nuansa Hijau */
+            --primary-color: #059669; /* Emerald Green */
             --primary-dark: #064e3b;
             --secondary-color: #ecfdf5;
             --success-color: #10b981;
@@ -156,6 +157,11 @@
             text-transform: uppercase; 
         }
 
+        .nama-saham-input::placeholder, .input-broker::placeholder {
+            text-transform: none;
+            font-weight: 500;
+        }
+
         .table-responsive {
             width: 100%;
             overflow-x: auto;
@@ -172,14 +178,6 @@
             padding: 12px 15px;
             text-align: left;
             font-size: 14px;
-        }
-
-        .col-no {
-            width: 50px;
-            text-align: center;
-            color: #64748b;
-            font-weight: 800;
-            background: #fdfdfd;
         }
 
         .col-param {
@@ -296,7 +294,6 @@
                 <table>
                     <tbody>
                         <tr>
-                            <td class="col-no">1</td>
                             <td class="col-param">Saham Bergerak</td>
                             <td>
                                 <label><input type="checkbox" onchange="saveData()"> Bergerak</label>
@@ -304,7 +301,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-no">2</td>
                             <td class="col-param">Broker Action (Flow)</td>
                             <td>
                                 <label><input type="checkbox" onchange="saveData()"> Kiri Ke Kanan</label>
@@ -312,7 +308,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-no">#</td>
                             <td class="col-param">Top Buy (Broker & AVG)</td>
                             <td>
                                 <div class="input-group">
@@ -323,7 +318,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-no">#</td>
                             <td class="col-param">Akumulasi / Distribusi</td>
                             <td>
                                 <label><input type="checkbox" onchange="saveData()"> Big Acc</label>
@@ -332,7 +326,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-no">3</td>
                             <td class="col-param">Price & Volume</td>
                             <td>
                                 <div style="display:flex; gap:25px;">
@@ -348,7 +341,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-no">4</td>
                             <td class="col-param">Stochastic</td>
                             <td>
                                 <label><input type="checkbox" onchange="saveData()"> Golden Cross</label>
@@ -356,7 +348,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-no">5</td>
                             <td class="col-param">MACD</td>
                             <td>
                                 <label><input type="checkbox" onchange="saveData()"> Golden Cross</label>
@@ -364,7 +355,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-no">6</td>
                             <td class="col-param">Moving Average (MA 20)</td>
                             <td>
                                 <label><input type="checkbox" onchange="saveData()"> Diatas MA 20</label>
@@ -384,13 +374,20 @@
             loadData();
         });
 
+        function formatTanggalSekarang() {
+            const sekarang = new Date();
+            const dd = String(sekarang.getDate()).padStart(2, '0');
+            const mm = String(sekarang.getMonth() + 1).padStart(2, '0'); 
+            const yyyy = sekarang.getFullYear();
+            return `${dd}-${mm}-${yyyy}`;
+        }
+
         function tampilkanTanggal() {
             const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
             const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
             const sekarang = new Date();
             const hasil = hari[sekarang.getDay()] + ", " + sekarang.getDate() + " " + bulan[sekarang.getMonth()] + " " + sekarang.getFullYear();
             document.getElementById("tanggal-otomatis").innerText = hasil;
-            return hasil;
         }
 
         function tambahTabel(data = null) {
@@ -460,27 +457,22 @@
             const btnGroup = document.querySelector('.btn-group');
             const watermark = document.getElementById('pdf-watermark');
             const hapusButtons = document.querySelectorAll('.action-btn');
+            
+            const tanggalFile = formatTanggalSekarang();
 
-            // Format Tanggal untuk Nama File
-            const sekarang = new Date();
-            const bulanNama = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-            const tglFormatted = sekarang.getDate() + " " + bulanNama[sekarang.getMonth()] + " " + sekarang.getFullYear();
-
-            // Sembunyikan tombol saat proses cetak
             btnGroup.classList.add('no-print');
             watermark.style.display = 'block';
             hapusButtons.forEach(btn => btn.classList.add('no-print'));
 
             const opt = {
                 margin: [0.3, 0.2, 0.3, 0.2],
-                filename: `JURNAL BPJP ${tglFormatted}.pdf`, 
+                filename: `JURNAL BPJP ${tanggalFile}.pdf`,
                 image: { type: 'jpeg', quality: 1 },
                 html2canvas: { scale: 3, useCORS: true, scrollY: 0 },
                 jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
-                // Munculkan kembali tombol
                 btnGroup.classList.remove('no-print');
                 watermark.style.display = 'none';
                 hapusButtons.forEach(btn => btn.classList.remove('no-print'));
