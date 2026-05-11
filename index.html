@@ -8,8 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
-            /* Palette Warna Nuansa Hijau */
-            --primary-color: #059669; /* Emerald Green */
+            --primary-color: #059669;
             --primary-dark: #064e3b;
             --secondary-color: #ecfdf5;
             --success-color: #10b981;
@@ -110,7 +109,6 @@
             filter: brightness(1.05);
         }
 
-        /* Gradasi Tombol Hijau */
         .btn-tambah { background: linear-gradient(135deg, #34d399 0%, #059669 100%); }
         .btn-pdf { background: linear-gradient(135deg, #10b981 0%, #047857 100%); }
         .btn-reset { background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%); }
@@ -147,7 +145,6 @@
             border-bottom: 2px solid var(--primary-color);
         }
 
-        /* Kapital Otomatis saat mengetik */
         .nama-saham-input {
             font-size: 18px;
             font-weight: 800;
@@ -157,12 +154,6 @@
             background: transparent;
             color: var(--primary-dark);
             text-transform: uppercase; 
-        }
-
-        /* Placeholder tetap normal (tidak kapital) */
-        .nama-saham-input::placeholder, .input-broker::placeholder {
-            text-transform: none;
-            font-weight: 500;
         }
 
         .table-responsive {
@@ -210,7 +201,7 @@
             font-size: 14px;
             outline: none;
             width: 110px;
-            text-transform: uppercase; /* Kapital Otomatis */
+            text-transform: uppercase;
         }
 
         .input-avg {
@@ -399,6 +390,7 @@
             const sekarang = new Date();
             const hasil = hari[sekarang.getDay()] + ", " + sekarang.getDate() + " " + bulan[sekarang.getMonth()] + " " + sekarang.getFullYear();
             document.getElementById("tanggal-otomatis").innerText = hasil;
+            return hasil;
         }
 
         function tambahTabel(data = null) {
@@ -469,19 +461,26 @@
             const watermark = document.getElementById('pdf-watermark');
             const hapusButtons = document.querySelectorAll('.action-btn');
 
+            // Format Tanggal untuk Nama File
+            const sekarang = new Date();
+            const bulanNama = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            const tglFormatted = sekarang.getDate() + " " + bulanNama[sekarang.getMonth()] + " " + sekarang.getFullYear();
+
+            // Sembunyikan tombol saat proses cetak
             btnGroup.classList.add('no-print');
             watermark.style.display = 'block';
             hapusButtons.forEach(btn => btn.classList.add('no-print'));
 
             const opt = {
                 margin: [0.3, 0.2, 0.3, 0.2],
-                filename: 'Jurnal-Saham-BPJP-Green.pdf',
+                filename: `JURNAL BPJP ${tglFormatted}.pdf`, 
                 image: { type: 'jpeg', quality: 1 },
                 html2canvas: { scale: 3, useCORS: true, scrollY: 0 },
                 jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
+                // Munculkan kembali tombol
                 btnGroup.classList.remove('no-print');
                 watermark.style.display = 'none';
                 hapusButtons.forEach(btn => btn.classList.remove('no-print'));
@@ -491,4 +490,3 @@
 </body>
 
 </html>
- 
