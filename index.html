@@ -4,18 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jurnal Analisis Saham BPJP</title>
+    <title>Jurnal Analisis Saham BPJP - Green Edition</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
-            /* Palette Warna Lebih Terang & Lembut */
-            --primary-color: #3b82f6;
-            --primary-dark: #1e40af;
+            /* Palette Warna Nuansa Hijau */
+            --primary-color: #059669; /* Emerald Green */
+            --primary-dark: #064e3b;
+            --secondary-color: #ecfdf5;
             --success-color: #10b981;
             --danger-color: #ef4444;
-            --bg-color: #f8fafc;
-            --border-color: #e2e8f0;
-            --text-main: #1e293b;
+            --bg-color: #f0fdf4;
+            --border-color: #d1fae5;
+            --text-main: #064e3b;
             --up-color: #059669;
             --down-color: #dc2626;
         }
@@ -28,8 +29,7 @@
 
         body {
             font-family: 'Inter', system-ui, sans-serif;
-            /* Gradasi dibuat jauh lebih terang */
-            background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
             color: var(--text-main);
             padding: 20px 10px;
             min-height: 100vh;
@@ -41,9 +41,9 @@
             background: #ffffff;
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 20px rgba(5, 150, 105, 0.08);
             position: relative;
-            border: 1px solid #f1f5f9;
+            border: 1px solid #d1fae5;
         }
 
         .watermark {
@@ -52,7 +52,7 @@
             top: 10px;
             right: 20px;
             font-size: 10px;
-            color: #cbd5e1;
+            color: #a7f3d0;
             font-style: italic;
         }
 
@@ -61,7 +61,7 @@
             font-size: 28px;
             font-family: "Amiri", "Times New Roman", serif;
             margin-bottom: 5px;
-            color: #334155;
+            color: var(--primary-dark);
             direction: rtl;
         }
 
@@ -75,7 +75,6 @@
             text-transform: uppercase;
         }
 
-        /* HEADER CONTROLS */
         .header-controls {
             text-align: center;
             margin-bottom: 25px;
@@ -107,16 +106,15 @@
 
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
             filter: brightness(1.05);
         }
 
-        /* Gradasi Tombol Lebih Soft */
-        .btn-tambah { background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); }
-        .btn-pdf { background: linear-gradient(135deg, #34d399 0%, #10b981 100%); }
+        /* Gradasi Tombol Hijau */
+        .btn-tambah { background: linear-gradient(135deg, #34d399 0%, #059669 100%); }
+        .btn-pdf { background: linear-gradient(135deg, #10b981 0%, #047857 100%); }
         .btn-reset { background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%); }
 
-        /* TANGGAL */
         .tanggal-wrapper {
             display: flex;
             justify-content: center;
@@ -124,16 +122,15 @@
         }
 
         .tanggal-box {
-            background: #f1f5f9;
-            color: #64748b;
+            background: var(--secondary-color);
+            color: var(--primary-dark);
             padding: 6px 16px;
             border-radius: 20px;
             font-size: 13px;
             font-weight: 700;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border-color);
         }
 
-        /* TABEL STYLE (STRUKTUR LAMA YANG RAPI) */
         .tabel-container {
             border: 1px solid var(--border-color);
             border-radius: 12px;
@@ -145,11 +142,12 @@
         }
 
         .nama-saham-header {
-            background: #f8fafc;
+            background: var(--secondary-color);
             padding: 15px;
             border-bottom: 2px solid var(--primary-color);
         }
 
+        /* Kapital Otomatis saat mengetik */
         .nama-saham-input {
             font-size: 18px;
             font-weight: 800;
@@ -157,7 +155,14 @@
             width: 100%;
             outline: none;
             background: transparent;
-            color: #1e3a8a;
+            color: var(--primary-dark);
+            text-transform: uppercase; 
+        }
+
+        /* Placeholder tetap normal (tidak kapital) */
+        .nama-saham-input::placeholder, .input-broker::placeholder {
+            text-transform: none;
+            font-weight: 500;
         }
 
         .table-responsive {
@@ -181,25 +186,34 @@
         .col-no {
             width: 50px;
             text-align: center;
-            color: #94a3b8;
+            color: #64748b;
             font-weight: 800;
-            background: #fcfcfc;
+            background: #fdfdfd;
         }
 
         .col-param {
             width: 250px;
             font-weight: 700;
-            color: #475569;
+            color: #334155;
         }
 
-        /* INPUTS */
         .input-group {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .input-broker, .input-avg {
+        .input-broker {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            width: 110px;
+            text-transform: uppercase; /* Kapital Otomatis */
+        }
+
+        .input-avg {
             padding: 8px;
             border: 1px solid var(--border-color);
             border-radius: 8px;
@@ -424,11 +438,11 @@
                     checks: checks
                 });
             });
-            localStorage.setItem('bpjp_v_final_v2', JSON.stringify(tables));
+            localStorage.setItem('bpjp_v_final_green', JSON.stringify(tables));
         }
 
         function loadData() {
-            const saved = localStorage.getItem('bpjp_v_final_v2');
+            const saved = localStorage.getItem('bpjp_v_final_green');
             if (saved) {
                 const tables = JSON.parse(saved);
                 if (tables.length > 0) {
@@ -444,7 +458,7 @@
 
         function resetSemua() {
             if (confirm("Hapus semua data analisis?")) {
-                localStorage.removeItem('bpjp_v_final_v2');
+                localStorage.removeItem('bpjp_v_final_green');
                 location.reload();
             }
         }
@@ -461,7 +475,7 @@
 
             const opt = {
                 margin: [0.3, 0.2, 0.3, 0.2],
-                filename: 'Jurnal-Saham-BPJP.pdf',
+                filename: 'Jurnal-Saham-BPJP-Green.pdf',
                 image: { type: 'jpeg', quality: 1 },
                 html2canvas: { scale: 3, useCORS: true, scrollY: 0 },
                 jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
@@ -477,3 +491,4 @@
 </body>
 
 </html>
+ 
