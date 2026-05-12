@@ -8,8 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
-            /* Palette Warna Nuansa Hijau */
-            --primary-color: #059669; /* Emerald Green */
+            --primary-color: #059669; 
             --primary-dark: #064e3b;
             --secondary-color: #ecfdf5;
             --success-color: #10b981;
@@ -157,11 +156,6 @@
             text-transform: uppercase; 
         }
 
-        .nama-saham-input::placeholder, .input-broker::placeholder {
-            text-transform: none;
-            font-weight: 500;
-        }
-
         .table-responsive {
             width: 100%;
             overflow-x: auto;
@@ -267,7 +261,7 @@
         <div class="header-controls" id="header-area">
             <div class="btn-group">
                 <button class="btn-tambah" onclick="tambahTabel()">
-                    <span>📃</span> Tambah Saham
+                    <span>📑</span> Tambah Saham
                 </button>
                 <button class="btn-pdf" onclick="simpanPDF()">
                     <span>📥</span> Simpan Ke PDF
@@ -350,8 +344,8 @@
                         <tr>
                             <td class="col-param">MACD</td>
                             <td>
-                                <label><input type="checkbox" onchange="saveData()"> Golden Cross</label>
-                                <label><input type="checkbox" onchange="saveData()"> Death Cross</label>
+                                <label><input type="checkbox" onchange="saveData()"> Golden Cross / Sedang Bullish</label>
+                                <label><input type="checkbox" onchange="saveData()"> Death Cross / Sedang Bearish</label>
                             </td>
                         </tr>
                         <tr>
@@ -374,12 +368,18 @@
             loadData();
         });
 
-        function formatTanggalSekarang() {
+        // Fungsi khusus format nama file PDF
+        function formatTanggalFile() {
+            const hari = ["MINGGU", "SENIN", "SELASA", "RABU", "KAMIS", "JUMAT", "SABTU"];
+            const bulan = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"];
             const sekarang = new Date();
-            const dd = String(sekarang.getDate()).padStart(2, '0');
-            const mm = String(sekarang.getMonth() + 1).padStart(2, '0'); 
-            const yyyy = sekarang.getFullYear();
-            return `${dd}-${mm}-${yyyy}`;
+            
+            const namaHari = hari[sekarang.getDay()];
+            const tgl = sekarang.getDate();
+            const namaBulan = bulan[sekarang.getMonth()];
+            const tahun = sekarang.getFullYear();
+
+            return `${namaHari}, ${tgl} ${namaBulan} ${tahun}`;
         }
 
         function tampilkanTanggal() {
@@ -458,7 +458,7 @@
             const watermark = document.getElementById('pdf-watermark');
             const hapusButtons = document.querySelectorAll('.action-btn');
             
-            const tanggalFile = formatTanggalSekarang();
+            const infoTanggal = formatTanggalFile();
 
             btnGroup.classList.add('no-print');
             watermark.style.display = 'block';
@@ -466,7 +466,7 @@
 
             const opt = {
                 margin: [0.3, 0.2, 0.3, 0.2],
-                filename: `JURNAL BPJP ${tanggalFile}.pdf`,
+                filename: `JURNAL BPJP ${infoTanggal}.pdf`,
                 image: { type: 'jpeg', quality: 1 },
                 html2canvas: { scale: 3, useCORS: true, scrollY: 0 },
                 jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
